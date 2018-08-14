@@ -1,0 +1,11 @@
+function  [trust_matrix , C , IC]= Trust_Matrix(trust)
+N = max(max(trust));
+trust = cat(1, trust , [N , N]);
+trust_matrix = sparse(trust(: , 1) , trust(: , 2) , 1);
+IC = sparse(trust(: , 1) , trust(: , 2) , 1);
+out_deg = sum(trust_matrix);
+in_deg = sum(trust_matrix , 2);
+trust(: , 3) = in_deg(trust(: , 2) , 1);
+trust(: , 4) = out_deg(1 , trust(: , 1));
+trust(: , 5) = (trust(: , 3) ./ trust(: , 3) + trust(: , 4)) .^ 0.5;
+C = sparse(trust(: , 1) , trust(: , 2) , trust(: , 5));
