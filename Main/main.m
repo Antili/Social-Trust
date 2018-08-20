@@ -25,27 +25,23 @@ num_item = max(rating(: , 2));
 [C_in] = C_make(trust_in_list , Cent ,  num_user);
 
 i = 0;
-for alfa = 0.4 : 0.25 : 0.41
-    for beta = 1 : 1 : 1
+for alfa = 0 : 0.25 : 1
+    for beta = 0 : 0.25 : 1
         i = i + 1;
-        if E(i , 1) == 0
-            disp([alfa beta]);
+        disp([alfa beta]);
             
-            [SC_to] = SC_make(S_to , C_to ,  num_user , beta);
-            [SC_in] = SC_make(S_in , C_in ,  num_user , beta);
+        [SC_to] = SC_make(S_to , C_to ,  num_user , beta);
+        [SC_in] = SC_make(S_in , C_in ,  num_user , beta);
             
-            %[sim_2] = similarity_2(list_user_1 , list_user_2 , learn_list_user_R , learn_list_rate , learn_list_item);
+        [test_E , steps , U , V] = Fact(list_user_R, list_item , list_rate_norm , trust_to_list , trust_in_list, SC_to , SC_in , alfa , num_user, num_item,  L);
             
-            [test_E , steps , U , V] = Fact(list_user_R, list_item , list_rate_norm , trust_to_list , trust_in_list, SC_to , SC_in , alfa , num_user, num_item,  L);
+		 E(i , 1) = test_E;
+         Alfa(i , 1) = alfa;
+         Beta(i , 1) = beta;
             
-            E(i , 1) = test_E;
-            Alfa(i , 1) = alfa;
-            Beta(i , 1) = beta;
+         disp([alfa  beta test_E steps]);
             
-            disp([alfa  beta test_E steps]);
-            
-            save('output.mat');
-        end
-    end
+          save('output.mat');
+     end
 end
 
